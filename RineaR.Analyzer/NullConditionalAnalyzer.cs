@@ -4,67 +4,69 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace RineaR.Analyzer;
-
-[DiagnosticAnalyzer(LanguageNames.CSharp)]
-public class NullConditionalAnalyzer : DiagnosticAnalyzer
+namespace RineaR.Analyzer
 {
-    public const string DiagnosticId = "PROHIBIT_NULLABLE_OPERATORS";
-
-    private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(
-        DiagnosticId,
-        title: "禁止された null 関連演算子の使用",
-        messageFormat: "演算子 '{0}' の使用は禁止されています",
-        category: "Usage",
-        defaultSeverity: DiagnosticSeverity.Error,
-        isEnabledByDefault: true,
-        description: "?.、??、??=、?[] の使用は禁止されています。");
-
-    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
-
-    public override void Initialize(AnalysisContext context)
+    [DiagnosticAnalyzer(LanguageNames.CSharp)]
+    public class NullConditionalAnalyzer : DiagnosticAnalyzer
     {
-        context.EnableConcurrentExecution();
-        context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
+        public const string DiagnosticId = "PROHIBIT_NULLABLE_OPERATORS";
 
-        context.RegisterSyntaxNodeAction(AnalyzeConditionalAccess, SyntaxKind.ConditionalAccessExpression);
-        context.RegisterSyntaxNodeAction(AnalyzeCoalesceExpression, SyntaxKind.CoalesceExpression);
-        context.RegisterSyntaxNodeAction(AnalyzeCoalesceAssignmentExpression, SyntaxKind.CoalesceAssignmentExpression);
-    }
+        private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(
+            DiagnosticId,
+            title: "禁止された null 関連演算子の使用",
+            messageFormat: "演算子 '{0}' の使用は禁止されています",
+            category: "Usage",
+            defaultSeverity: DiagnosticSeverity.Error,
+            isEnabledByDefault: true,
+            description: "?.、??、??=、?[] の使用は禁止されています。");
 
-    private static void AnalyzeConditionalAccess(SyntaxNodeAnalysisContext context)
-    {
-        var node = (ConditionalAccessExpressionSyntax)context.Node;
+        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
-        if (node.WhenNotNull is InvocationExpressionSyntax)
+        public override void Initialize(AnalysisContext context)
         {
-            ReportDiagnostic(context, node.OperatorToken, "?.");
+            context.EnableConcurrentExecution();
+            context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
+
+            context.RegisterSyntaxNodeAction(AnalyzeConditionalAccess, SyntaxKind.ConditionalAccessExpression);
+            context.RegisterSyntaxNodeAction(AnalyzeCoalesceExpression, SyntaxKind.CoalesceExpression);
+            context.RegisterSyntaxNodeAction(AnalyzeCoalesceAssignmentExpression, SyntaxKind.CoalesceAssignmentExpression);
         }
-        else if (node.WhenNotNull is ElementBindingExpressionSyntax)
+
+        private static void AnalyzeConditionalAccess(SyntaxNodeAnalysisContext context)
         {
-            ReportDiagnostic(context, node.OperatorToken, "?[]");
+            var node = (ConditionalAccessExpressionSyntax)context.Node;
+
+            if (node.WhenNotNull is InvocationExpressionSyntax)
+            {
+                ReportDiagnostic(context, node.OperatorToken, "?.");
+            }
+            else if (node.WhenNotNull is ElementBindingExpressionSyntax)
+            {
+                ReportDiagnostic(context, node.OperatorToken, "?[]");
+            }
+            else
+            {
+                ReportDiagnostic(context, node.OperatorToken, "?.");
+            }
         }
-        else
+
+        private static void AnalyzeCoalesceExpression(SyntaxNodeAnalysisContext context)
         {
-            ReportDiagnostic(context, node.OperatorToken, "?.");
+            var node = (BinaryExpressionSyntax)context.Node;
+            ReportDiagnostic(context, node.OperatorToken, "??");
         }
-    }
 
-    private static void AnalyzeCoalesceExpression(SyntaxNodeAnalysisContext context)
-    {
-        var node = (BinaryExpressionSyntax)context.Node;
-        ReportDiagnostic(context, node.OperatorToken, "??");
-    }
+        private static void AnalyzeCoalesceAssignmentExpression(SyntaxNodeAnalysisContext context)
+        {
+            var node = (AssignmentExpressionSyntax)context.Node;
+            ReportDiagnostic(context, node.OperatorToken, "??=");
+        }
 
-    private static void AnalyzeCoalesceAssignmentExpression(SyntaxNodeAnalysisContext context)
-    {
-        var node = (AssignmentExpressionSyntax)context.Node;
-        ReportDiagnostic(context, node.OperatorToken, "??=");
-    }
-
-    private static void ReportDiagnostic(SyntaxNodeAnalysisContext context, SyntaxToken token, string operatorText)
-    {
-        var diagnostic = Diagnostic.Create(Rule, token.GetLocation(), operatorText);
-        context.ReportDiagnostic(diagnostic);
+        private static void ReportDiagnostic(SyntaxNodeAnalysisContext context, SyntaxToken token, string operatorText)
+        {
+            var diagnostic = Diagnostic.Create(Rule, token.GetLocation(), operatorText);
+            context.ReportDiagnostic(diagnostic);
+        }
     }
 }
+

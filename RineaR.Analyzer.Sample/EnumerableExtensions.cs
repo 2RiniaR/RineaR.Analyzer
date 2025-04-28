@@ -1,43 +1,44 @@
 using System;
 using System.Collections.Generic;
 
-namespace RineaR.Analyzer.Sample;
-
-public static class EnumerableExtensions
+namespace RineaR.Analyzer.Sample
 {
-    public static void FirstOr<T>(this IEnumerable<T> source, Action<T> onExists, Action onNotExists)
+    public static class EnumerableExtensions
     {
-        if (source == null) throw new ArgumentNullException(nameof(source));
-        if (onExists == null) throw new ArgumentNullException(nameof(onExists));
-        if (onNotExists == null) throw new ArgumentNullException(nameof(onNotExists));
-
-        using var enumerator = source.GetEnumerator();
-        if (enumerator.MoveNext())
+        public static void FirstOr<T>(this IEnumerable<T> source, Action<T> onExists, Action onNotExists)
         {
-            onExists(enumerator.Current);
-        }
-        else
-        {
-            onNotExists();
-        }
-    }
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            if (onExists == null) throw new ArgumentNullException(nameof(onExists));
+            if (onNotExists == null) throw new ArgumentNullException(nameof(onNotExists));
 
-    public static void FirstOr<T>(this IEnumerable<T> source, Func<T, bool> predicate, Action<T> onExists, Action onNotExists)
-    {
-        if (source == null) throw new ArgumentNullException(nameof(source));
-        if (predicate == null) throw new ArgumentNullException(nameof(predicate));
-        if (onExists == null) throw new ArgumentNullException(nameof(onExists));
-        if (onNotExists == null) throw new ArgumentNullException(nameof(onNotExists));
-
-        foreach (var item in source)
-        {
-            if (predicate(item))
+            using var enumerator = source.GetEnumerator();
+            if (enumerator.MoveNext())
             {
-                onExists(item);
-                return;
+                onExists(enumerator.Current);
+            }
+            else
+            {
+                onNotExists();
             }
         }
 
-        onNotExists();
+        public static void FirstOr<T>(this IEnumerable<T> source, Func<T, bool> predicate, Action<T> onExists, Action onNotExists)
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            if (predicate == null) throw new ArgumentNullException(nameof(predicate));
+            if (onExists == null) throw new ArgumentNullException(nameof(onExists));
+            if (onNotExists == null) throw new ArgumentNullException(nameof(onNotExists));
+
+            foreach (var item in source)
+            {
+                if (predicate(item))
+                {
+                    onExists(item);
+                    return;
+                }
+            }
+
+            onNotExists();
+        }
     }
 }

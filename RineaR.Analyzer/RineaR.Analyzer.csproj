@@ -3,14 +3,14 @@
     <PropertyGroup>
         <IsPackable>false</IsPackable>
         <Nullable>enable</Nullable>
-        <LangVersion>latest</LangVersion>
+        <LangVersion>10</LangVersion>
 
         <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
         <IsRoslynComponent>true</IsRoslynComponent>
 
         <PackageId>RineaR.Analyzer</PackageId>
 
-        <TargetFrameworks>net8.0;net6.0</TargetFrameworks>
+        <TargetFrameworks>netstandard2.1;net6.0;net8.0</TargetFrameworks>
     </PropertyGroup>
 
     <ItemGroup>

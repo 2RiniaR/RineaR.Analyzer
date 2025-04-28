@@ -5,14 +5,14 @@ using Microsoft.CodeAnalysis.Testing;
 using Microsoft.CodeAnalysis.Testing.Verifiers;
 using Xunit;
 
-namespace RineaR.Analyzer.Tests;
-
-public class FirstOrDefaultAnalyzerTests
+namespace RineaR.Analyzer.Tests
 {
-    [Fact]
-    public async Task ReportDiagnostic_WhenUsingFirstOrDefaultWithoutPredicate()
+    public class FirstOrDefaultAnalyzerTests
     {
-        var testCode = @"
+        [Fact]
+        public async Task ReportDiagnostic_WhenUsingFirstOrDefaultWithoutPredicate()
+        {
+            var testCode = @"
 using System.Linq;
 using System.Collections.Generic;
 
@@ -25,23 +25,23 @@ class TestClass
     }
 }";
 
-        var expected = new DiagnosticResult(FirstOrDefaultAnalyzer.DiagnosticId, DiagnosticSeverity.Error)
-            .WithLocation(0);
+            var expected = new DiagnosticResult(FirstOrDefaultAnalyzer.DiagnosticId, DiagnosticSeverity.Error)
+                .WithLocation(0);
 
-        var test = new CSharpAnalyzerTest<FirstOrDefaultAnalyzer, XUnitVerifier>
+            var test = new CSharpAnalyzerTest<FirstOrDefaultAnalyzer, XUnitVerifier>
+            {
+                TestCode = testCode,
+                ReferenceAssemblies = ReferenceAssemblies.Net.Net60, // ← System.Linq解決用
+                ExpectedDiagnostics = { expected }
+            };
+
+            await test.RunAsync();
+        }
+
+        [Fact]
+        public async Task ReportDiagnostic_WhenUsingFirstOrDefaultWithPredicate()
         {
-            TestCode = testCode,
-            ReferenceAssemblies = ReferenceAssemblies.Net.Net60, // ← System.Linq解決用
-            ExpectedDiagnostics = { expected }
-        };
-
-        await test.RunAsync();
-    }
-
-    [Fact]
-    public async Task ReportDiagnostic_WhenUsingFirstOrDefaultWithPredicate()
-    {
-        var testCode = @"
+            var testCode = @"
 using System.Linq;
 using System.Collections.Generic;
 
@@ -54,16 +54,17 @@ class TestClass
     }
 }";
 
-        var expected = new DiagnosticResult(FirstOrDefaultAnalyzer.DiagnosticId, DiagnosticSeverity.Error)
-            .WithLocation(0);
+            var expected = new DiagnosticResult(FirstOrDefaultAnalyzer.DiagnosticId, DiagnosticSeverity.Error)
+                .WithLocation(0);
 
-        var test = new CSharpAnalyzerTest<FirstOrDefaultAnalyzer, XUnitVerifier>
-        {
-            TestCode = testCode,
-            ReferenceAssemblies = ReferenceAssemblies.Net.Net60,
-            ExpectedDiagnostics = { expected }
-        };
+            var test = new CSharpAnalyzerTest<FirstOrDefaultAnalyzer, XUnitVerifier>
+            {
+                TestCode = testCode,
+                ReferenceAssemblies = ReferenceAssemblies.Net.Net60,
+                ExpectedDiagnostics = { expected }
+            };
 
-        await test.RunAsync();
+            await test.RunAsync();
+        }
     }
 }

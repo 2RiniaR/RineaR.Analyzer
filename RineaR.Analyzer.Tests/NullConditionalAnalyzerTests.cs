@@ -5,25 +5,25 @@ using Microsoft.CodeAnalysis.Testing;
 using Microsoft.CodeAnalysis.Testing.Verifiers;
 using Xunit;
 
-namespace RineaR.Analyzer.Tests;
-
-public class NullConditionalAnalyzerTests
+namespace RineaR.Analyzer.Tests
 {
-    private async Task VerifyAnalyzerAsync(string source, params DiagnosticResult[] expectedDiagnostics)
+    public class NullConditionalAnalyzerTests
     {
-        var test = new CSharpAnalyzerTest<NullConditionalAnalyzer, XUnitVerifier>
+        private async Task VerifyAnalyzerAsync(string source, params DiagnosticResult[] expectedDiagnostics)
         {
-            TestCode = source
-        };
+            var test = new CSharpAnalyzerTest<NullConditionalAnalyzer, XUnitVerifier>
+            {
+                TestCode = source
+            };
 
-        test.ExpectedDiagnostics.AddRange(expectedDiagnostics);
-        await test.RunAsync();
-    }
+            test.ExpectedDiagnostics.AddRange(expectedDiagnostics);
+            await test.RunAsync();
+        }
 
-    [Fact]
-    public async Task ReportsDiagnostic_ForConditionalAccess()
-    {
-        var source = @"
+        [Fact]
+        public async Task ReportsDiagnostic_ForConditionalAccess()
+        {
+            var source = @"
 class C
 {
     void M(string s)
@@ -31,16 +31,16 @@ class C
         var len = s?.Length;
     }
 }";
-        var expected = new DiagnosticResult(NullConditionalAnalyzer.DiagnosticId, DiagnosticSeverity.Error)
-            .WithSpan(6, 20, 6, 21) // ?. の位置
-            .WithArguments("?.");
-        await VerifyAnalyzerAsync(source, expected);
-    }
+            var expected = new DiagnosticResult(NullConditionalAnalyzer.DiagnosticId, DiagnosticSeverity.Error)
+                .WithSpan(6, 20, 6, 21) // ?. の位置
+                .WithArguments("?.");
+            await VerifyAnalyzerAsync(source, expected);
+        }
 
-    [Fact]
-    public async Task ReportsDiagnostic_ForCoalesceOperator()
-    {
-        var source = @"
+        [Fact]
+        public async Task ReportsDiagnostic_ForCoalesceOperator()
+        {
+            var source = @"
 class C
 {
     void M(string s)
@@ -48,16 +48,16 @@ class C
         var value = s ?? ""default"";
     }
 }";
-        var expected = new DiagnosticResult(NullConditionalAnalyzer.DiagnosticId, DiagnosticSeverity.Error)
-            .WithSpan(6, 23, 6, 25) // ?? の位置
-            .WithArguments("??");
-        await VerifyAnalyzerAsync(source, expected);
-    }
+            var expected = new DiagnosticResult(NullConditionalAnalyzer.DiagnosticId, DiagnosticSeverity.Error)
+                .WithSpan(6, 23, 6, 25) // ?? の位置
+                .WithArguments("??");
+            await VerifyAnalyzerAsync(source, expected);
+        }
 
-    [Fact]
-    public async Task ReportsDiagnostic_ForNullConditionalIndexer()
-    {
-        var source = @"
+        [Fact]
+        public async Task ReportsDiagnostic_ForNullConditionalIndexer()
+        {
+            var source = @"
 class C
 {
     void M(string[] s)
@@ -65,16 +65,16 @@ class C
         var item = s?[0];
     }
 }";
-        var expected = new DiagnosticResult(NullConditionalAnalyzer.DiagnosticId, DiagnosticSeverity.Error)
-            .WithSpan(6, 21, 6, 22) // ?[ の位置（?の部分）
-            .WithArguments("?[]");
-        await VerifyAnalyzerAsync(source, expected);
-    }
+            var expected = new DiagnosticResult(NullConditionalAnalyzer.DiagnosticId, DiagnosticSeverity.Error)
+                .WithSpan(6, 21, 6, 22) // ?[ の位置（?の部分）
+                .WithArguments("?[]");
+            await VerifyAnalyzerAsync(source, expected);
+        }
 
-    [Fact]
-    public async Task NoDiagnostic_WhenNoProhibitedOperators()
-    {
-        var source = @"
+        [Fact]
+        public async Task NoDiagnostic_WhenNoProhibitedOperators()
+        {
+            var source = @"
 class C
 {
     void M(string s)
@@ -83,13 +83,13 @@ class C
         var result = s + ""suffix"";
     }
 }";
-        await VerifyAnalyzerAsync(source /* ← No expected diagnostics */);
-    }
+            await VerifyAnalyzerAsync(source /* ← No expected diagnostics */);
+        }
     
-    [Fact]
-    public async Task ReportsDiagnostic_ForCoalesceAssignmentOperator()
-    {
-        var source = @"
+        [Fact]
+        public async Task ReportsDiagnostic_ForCoalesceAssignmentOperator()
+        {
+            var source = @"
 class C
 {
     void M(string s)
@@ -97,9 +97,10 @@ class C
         s ??= ""default"";
     }
 }";
-        var expected = new DiagnosticResult(NullConditionalAnalyzer.DiagnosticId, DiagnosticSeverity.Error)
-            .WithSpan(6, 11, 6, 14) // ??= の位置
-            .WithArguments("??=");
-        await VerifyAnalyzerAsync(source, expected);
+            var expected = new DiagnosticResult(NullConditionalAnalyzer.DiagnosticId, DiagnosticSeverity.Error)
+                .WithSpan(6, 11, 6, 14) // ??= の位置
+                .WithArguments("??=");
+            await VerifyAnalyzerAsync(source, expected);
+        }
     }
 }

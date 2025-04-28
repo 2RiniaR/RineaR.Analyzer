@@ -5,25 +5,25 @@ using Microsoft.CodeAnalysis.Testing;
 using Microsoft.CodeAnalysis.Testing.Verifiers;
 using Xunit;
 
-namespace RineaR.Analyzer.Tests;
-
-public class AccessorAnalyzerTests
+namespace RineaR.Analyzer.Tests
 {
-    private async Task VerifyAnalyzerAsync(string source, params DiagnosticResult[] expectedDiagnostics)
+    public class AccessorAnalyzerTests
     {
-        var test = new CSharpAnalyzerTest<AccessorAnalyzer, XUnitVerifier>
+        private async Task VerifyAnalyzerAsync(string source, params DiagnosticResult[] expectedDiagnostics)
         {
-            TestCode = source
-        };
+            var test = new CSharpAnalyzerTest<AccessorAnalyzer, XUnitVerifier>
+            {
+                TestCode = source
+            };
 
-        test.ExpectedDiagnostics.AddRange(expectedDiagnostics);
-        await test.RunAsync();
-    }
+            test.ExpectedDiagnostics.AddRange(expectedDiagnostics);
+            await test.RunAsync();
+        }
     
-    [Fact]
-    public async Task ReportsDiagnostic_ForIndexerAccess()
-    {
-        var source = @"
+        [Fact]
+        public async Task ReportsDiagnostic_ForIndexerAccess()
+        {
+            var source = @"
 class C
 {
     void M(string[] s)
@@ -31,9 +31,10 @@ class C
         var item = s[0];
     }
 }";
-        var expected = new DiagnosticResult(AccessorAnalyzer.DiagnosticId, DiagnosticSeverity.Error)
-            .WithSpan(6, 21, 6, 22) // [ の位置
-            .WithArguments("[]");
-        await VerifyAnalyzerAsync(source, expected);
+            var expected = new DiagnosticResult(AccessorAnalyzer.DiagnosticId, DiagnosticSeverity.Error)
+                .WithSpan(6, 21, 6, 22) // [ の位置
+                .WithArguments("[]");
+            await VerifyAnalyzerAsync(source, expected);
+        }
     }
 }

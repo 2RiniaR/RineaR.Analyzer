@@ -5,24 +5,24 @@ using Microsoft.CodeAnalysis.Testing;
 using Microsoft.CodeAnalysis.Testing.Verifiers;
 using Xunit;
 
-namespace RineaR.Analyzer.Tests;
-
-public class SwitchAnalyzerTests
+namespace RineaR.Analyzer.Tests
 {
-    private async Task VerifyAnalyzerAsync(string source, params DiagnosticResult[] expectedDiagnostics)
+    public class SwitchAnalyzerTests
     {
-        var test = new CSharpAnalyzerTest<SwitchAnalyzer, XUnitVerifier>
+        private async Task VerifyAnalyzerAsync(string source, params DiagnosticResult[] expectedDiagnostics)
         {
-            TestCode = source
-        };
-        test.ExpectedDiagnostics.AddRange(expectedDiagnostics);
-        await test.RunAsync();
-    }
+            var test = new CSharpAnalyzerTest<SwitchAnalyzer, XUnitVerifier>
+            {
+                TestCode = source
+            };
+            test.ExpectedDiagnostics.AddRange(expectedDiagnostics);
+            await test.RunAsync();
+        }
 
-    [Fact]
-    public async Task ReportsDiagnostic_WhenTooManyCases()
-    {
-        var source = @"
+        [Fact]
+        public async Task ReportsDiagnostic_WhenTooManyCases()
+        {
+            var source = @"
 class C
 {
     void M(int x)
@@ -42,16 +42,16 @@ class C
         }
     }
 }";
-        var expected = new DiagnosticResult(SwitchAnalyzer.DiagnosticId, DiagnosticSeverity.Error)
-            .WithSpan(6, 9, 6, 15) // switch の位置
-            .WithArguments(10, 1); // 10個のcase、最大1行
-        await VerifyAnalyzerAsync(source, expected);
-    }
+            var expected = new DiagnosticResult(SwitchAnalyzer.DiagnosticId, DiagnosticSeverity.Error)
+                .WithSpan(6, 9, 6, 15) // switch の位置
+                .WithArguments(10, 1); // 10個のcase、最大1行
+            await VerifyAnalyzerAsync(source, expected);
+        }
 
-    [Fact]
-    public async Task ReportsDiagnostic_WhenCaseBodyTooLong()
-    {
-        var source = @"
+        [Fact]
+        public async Task ReportsDiagnostic_WhenCaseBodyTooLong()
+        {
+            var source = @"
 class C
 {
     void M(int x)
@@ -73,16 +73,16 @@ class C
         }
     }
 }";
-        var expected = new DiagnosticResult(SwitchAnalyzer.DiagnosticId, DiagnosticSeverity.Error)
-            .WithSpan(6, 9, 6, 15) // switch の位置
-            .WithArguments(1, 11); // 1個のcase、最大11行
-        await VerifyAnalyzerAsync(source, expected);
-    }
+            var expected = new DiagnosticResult(SwitchAnalyzer.DiagnosticId, DiagnosticSeverity.Error)
+                .WithSpan(6, 9, 6, 15) // switch の位置
+                .WithArguments(1, 11); // 1個のcase、最大11行
+            await VerifyAnalyzerAsync(source, expected);
+        }
 
-    [Fact]
-    public async Task NoDiagnostic_WhenNormalSwitch()
-    {
-        var source = @"
+        [Fact]
+        public async Task NoDiagnostic_WhenNormalSwitch()
+        {
+            var source = @"
 class C
 {
     void M(int x)
@@ -101,6 +101,7 @@ class C
         }
     }
 }";
-        await VerifyAnalyzerAsync(source);
+            await VerifyAnalyzerAsync(source);
+        }
     }
 }
