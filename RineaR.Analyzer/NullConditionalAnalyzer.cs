@@ -54,12 +54,16 @@ namespace RineaR.Analyzer
 
         private static void AnalyzeCoalesceExpression(SyntaxNodeAnalysisContext context)
         {
+            if (Utility.IsTarget(context) == false) return;
+            
             var node = (BinaryExpressionSyntax)context.Node;
             ReportDiagnostic(context, node.OperatorToken, "??");
         }
 
         private static void AnalyzeCoalesceAssignmentExpression(SyntaxNodeAnalysisContext context)
         {
+            if (Utility.IsTarget(context) == false) return;
+            
             var node = (AssignmentExpressionSyntax)context.Node;
             ReportDiagnostic(context, node.OperatorToken, "??=");
         }
