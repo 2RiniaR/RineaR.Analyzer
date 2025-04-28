@@ -17,7 +17,7 @@ namespace RineaR.Analyzer
             title: "複雑な switch 文は禁止されています",
             messageFormat: "switch文が複雑すぎます（caseが{0}個、中身が最大{1}行）",
             category: "Usage",
-            defaultSeverity: DiagnosticSeverity.Error,
+            defaultSeverity: DiagnosticSeverity.Warning,
             isEnabledByDefault: true,
             description: "caseが10個以上、またはcase内部が10行以上のswitch文は禁止です。");
 

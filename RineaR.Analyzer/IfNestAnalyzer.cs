@@ -16,7 +16,7 @@ namespace RineaR.Analyzer
             title: "if文のネストが深すぎます",
             messageFormat: "if文が{0}段にネストされています（最大2段まで許可）",
             category: "Usage",
-            defaultSeverity: DiagnosticSeverity.Error,
+            defaultSeverity: DiagnosticSeverity.Warning,
             isEnabledByDefault: true,
             description: "if文のネストは2段以内に制限されています。3段以上は禁止です。");
 

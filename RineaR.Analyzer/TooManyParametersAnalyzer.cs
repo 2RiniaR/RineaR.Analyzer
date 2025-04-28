@@ -16,7 +16,7 @@ namespace RineaR.Analyzer
             title: "メソッドの引数が多すぎます",
             messageFormat: "メソッドの引数が{0}個あります（最大9個まで許可）",
             category: "Usage",
-            defaultSeverity: DiagnosticSeverity.Error,
+            defaultSeverity: DiagnosticSeverity.Warning,
             isEnabledByDefault: true,
             description: "メソッドには9引数以内しか許可されません。10引数以上は禁止です。");
 

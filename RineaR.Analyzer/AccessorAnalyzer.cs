@@ -16,7 +16,7 @@ namespace RineaR.Analyzer
             title: "禁止された演算子または構文の使用",
             messageFormat: "演算子 '{0}' の使用は禁止されています",
             category: "Usage",
-            defaultSeverity: DiagnosticSeverity.Error,
+            defaultSeverity: DiagnosticSeverity.Warning,
             isEnabledByDefault: true,
             description: "[] の使用は禁止されています。");
 

@@ -16,7 +16,7 @@ namespace RineaR.Analyzer
             title: "FirstOrDefaultの使用は禁止されています",
             messageFormat: "FirstOrDefaultの使用は禁止されています。代わりに専用の拡張メソッドを使用してください。",
             category: "Usage",
-            defaultSeverity: DiagnosticSeverity.Error,
+            defaultSeverity: DiagnosticSeverity.Warning,
             isEnabledByDefault: true,
             description: "FirstOrDefaultは禁止です。拡張メソッドを利用してください。");
 
