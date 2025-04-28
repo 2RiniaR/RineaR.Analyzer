@@ -32,6 +32,8 @@ namespace RineaR.Analyzer
 
         private static void AnalyzeInvocation(SyntaxNodeAnalysisContext context)
         {
+            if (Utility.IsTarget(context) == false) return;
+            
             var invocation = (InvocationExpressionSyntax)context.Node;
 
             // メソッド名を取得

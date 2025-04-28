@@ -32,6 +32,8 @@ namespace RineaR.Analyzer
 
         private static void AnalyzeElementAccessExpression(SyntaxNodeAnalysisContext context)
         {
+            if (Utility.IsTarget(context) == false) return;
+            
             var node = (ElementAccessExpressionSyntax)context.Node;
             // 通常のインデクサアクセス: []
             var openBracketToken = node.ArgumentList.OpenBracketToken;

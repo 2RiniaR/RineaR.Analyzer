@@ -34,6 +34,8 @@ namespace RineaR.Analyzer
 
         private static void AnalyzeConditionalAccess(SyntaxNodeAnalysisContext context)
         {
+            if (Utility.IsTarget(context) == false) return;
+            
             var node = (ConditionalAccessExpressionSyntax)context.Node;
 
             if (node.WhenNotNull is InvocationExpressionSyntax)

@@ -33,6 +33,8 @@ namespace RineaR.Analyzer
 
         private static void AnalyzeSwitchStatement(SyntaxNodeAnalysisContext context)
         {
+            if (Utility.IsTarget(context) == false) return;
+            
             var switchStatement = (SwitchStatementSyntax)context.Node;
 
             var sectionCount = switchStatement.Sections.Count;
