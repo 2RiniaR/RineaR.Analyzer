@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
         <IsPackable>false</IsPackable>
         <Nullable>enable</Nullable>
         <LangVersion>latest</LangVersion>
@@ -10,6 +9,8 @@
         <IsRoslynComponent>true</IsRoslynComponent>
 
         <PackageId>RineaR.Analyzer</PackageId>
+
+        <TargetFrameworks>net8.0;net6.0</TargetFrameworks>
     </PropertyGroup>
 
     <ItemGroup>
