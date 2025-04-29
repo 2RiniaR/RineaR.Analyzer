@@ -25,7 +25,7 @@ class TestClass
     }
 }";
 
-            var expected = new DiagnosticResult(FirstOrDefaultAnalyzer.DiagnosticId, DiagnosticSeverity.Error)
+            var expected = new DiagnosticResult(FirstOrDefaultAnalyzer.DiagnosticId, DiagnosticSeverity.Warning)
                 .WithLocation(0);
 
             var test = new CSharpAnalyzerTest<FirstOrDefaultAnalyzer, XUnitVerifier>
@@ -54,7 +54,7 @@ class TestClass
     }
 }";
 
-            var expected = new DiagnosticResult(FirstOrDefaultAnalyzer.DiagnosticId, DiagnosticSeverity.Error)
+            var expected = new DiagnosticResult(FirstOrDefaultAnalyzer.DiagnosticId, DiagnosticSeverity.Warning)
                 .WithLocation(0);
 
             var test = new CSharpAnalyzerTest<FirstOrDefaultAnalyzer, XUnitVerifier>

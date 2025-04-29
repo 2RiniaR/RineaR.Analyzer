@@ -12,7 +12,12 @@ namespace RineaR.Analyzer
                 return true;
             }
 
-            return settings.IsTarget(context.Compilation.AssemblyName, context.Node.SyntaxTree.FilePath);
+            var asseblyName = context.Compilation.AssemblyName;
+            if (asseblyName == null)
+            {
+                return false;
+            }
+            return settings.IsTarget(asseblyName, context.Node.SyntaxTree.FilePath);
         }
     }
 }

@@ -38,7 +38,7 @@ class C
         }
     }
 }";
-            var expected = new DiagnosticResult(IfNestAnalyzer.DiagnosticId, DiagnosticSeverity.Error)
+            var expected = new DiagnosticResult(IfNestAnalyzer.DiagnosticId, DiagnosticSeverity.Warning)
                 .WithSpan(10, 17, 10, 19) // 3段目の if の位置
                 .WithArguments(3);
             await VerifyAnalyzerAsync(source, expected);

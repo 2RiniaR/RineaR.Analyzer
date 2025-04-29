@@ -27,7 +27,7 @@ class C
 {
     void M(int a, int b, int c, int d, int e, int f, int g, int h, int i, int k) {}
 }";
-            var expected = new DiagnosticResult(TooManyParametersAnalyzer.DiagnosticId, DiagnosticSeverity.Error)
+            var expected = new DiagnosticResult(TooManyParametersAnalyzer.DiagnosticId, DiagnosticSeverity.Warning)
                 .WithSpan(4, 10, 4, 11) // メソッド名 M の位置
                 .WithArguments(10);
             await VerifyAnalyzerAsync(source, expected);

@@ -31,7 +31,7 @@ class C
         var item = s[0];
     }
 }";
-            var expected = new DiagnosticResult(AccessorAnalyzer.DiagnosticId, DiagnosticSeverity.Error)
+            var expected = new DiagnosticResult(AccessorAnalyzer.DiagnosticId, DiagnosticSeverity.Warning)
                 .WithSpan(6, 21, 6, 22) // [ の位置
                 .WithArguments("[]");
             await VerifyAnalyzerAsync(source, expected);

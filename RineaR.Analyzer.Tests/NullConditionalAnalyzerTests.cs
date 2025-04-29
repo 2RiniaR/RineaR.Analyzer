@@ -31,7 +31,7 @@ class C
         var len = s?.Length;
     }
 }";
-            var expected = new DiagnosticResult(NullConditionalAnalyzer.DiagnosticId, DiagnosticSeverity.Error)
+            var expected = new DiagnosticResult(NullConditionalAnalyzer.DiagnosticId, DiagnosticSeverity.Warning)
                 .WithSpan(6, 20, 6, 21) // ?. の位置
                 .WithArguments("?.");
             await VerifyAnalyzerAsync(source, expected);
@@ -48,7 +48,7 @@ class C
         var value = s ?? ""default"";
     }
 }";
-            var expected = new DiagnosticResult(NullConditionalAnalyzer.DiagnosticId, DiagnosticSeverity.Error)
+            var expected = new DiagnosticResult(NullConditionalAnalyzer.DiagnosticId, DiagnosticSeverity.Warning)
                 .WithSpan(6, 23, 6, 25) // ?? の位置
                 .WithArguments("??");
             await VerifyAnalyzerAsync(source, expected);
@@ -65,7 +65,7 @@ class C
         var item = s?[0];
     }
 }";
-            var expected = new DiagnosticResult(NullConditionalAnalyzer.DiagnosticId, DiagnosticSeverity.Error)
+            var expected = new DiagnosticResult(NullConditionalAnalyzer.DiagnosticId, DiagnosticSeverity.Warning)
                 .WithSpan(6, 21, 6, 22) // ?[ の位置（?の部分）
                 .WithArguments("?[]");
             await VerifyAnalyzerAsync(source, expected);
@@ -97,7 +97,7 @@ class C
         s ??= ""default"";
     }
 }";
-            var expected = new DiagnosticResult(NullConditionalAnalyzer.DiagnosticId, DiagnosticSeverity.Error)
+            var expected = new DiagnosticResult(NullConditionalAnalyzer.DiagnosticId, DiagnosticSeverity.Warning)
                 .WithSpan(6, 11, 6, 14) // ??= の位置
                 .WithArguments("??=");
             await VerifyAnalyzerAsync(source, expected);

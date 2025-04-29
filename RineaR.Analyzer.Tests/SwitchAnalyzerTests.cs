@@ -42,7 +42,7 @@ class C
         }
     }
 }";
-            var expected = new DiagnosticResult(SwitchAnalyzer.DiagnosticId, DiagnosticSeverity.Error)
+            var expected = new DiagnosticResult(SwitchAnalyzer.DiagnosticId, DiagnosticSeverity.Warning)
                 .WithSpan(6, 9, 6, 15) // switch の位置
                 .WithArguments(10, 1); // 10個のcase、最大1行
             await VerifyAnalyzerAsync(source, expected);
@@ -73,7 +73,7 @@ class C
         }
     }
 }";
-            var expected = new DiagnosticResult(SwitchAnalyzer.DiagnosticId, DiagnosticSeverity.Error)
+            var expected = new DiagnosticResult(SwitchAnalyzer.DiagnosticId, DiagnosticSeverity.Warning)
                 .WithSpan(6, 9, 6, 15) // switch の位置
                 .WithArguments(1, 11); // 1個のcase、最大11行
             await VerifyAnalyzerAsync(source, expected);
