@@ -32,8 +32,6 @@ namespace RineaR.Analyzer
 
         private static void AnalyzeMethodDeclaration(SyntaxNodeAnalysisContext context)
         {
-            if (Utility.IsTarget(context) == false) return;
-            
             var methodDeclaration = (MethodDeclarationSyntax)context.Node;
 
             int parameterCount = methodDeclaration.ParameterList.Parameters.Count;

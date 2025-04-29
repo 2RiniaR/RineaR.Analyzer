@@ -32,8 +32,6 @@ namespace RineaR.Analyzer
 
         private static void AnalyzeIfStatement(SyntaxNodeAnalysisContext context)
         {
-            if (Utility.IsTarget(context) == false) return;
-            
             var ifStatement = (IfStatementSyntax)context.Node;
 
             int nestLevel = 0;

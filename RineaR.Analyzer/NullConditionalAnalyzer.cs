@@ -34,8 +34,6 @@ namespace RineaR.Analyzer
 
         private static void AnalyzeConditionalAccess(SyntaxNodeAnalysisContext context)
         {
-            if (Utility.IsTarget(context) == false) return;
-            
             var node = (ConditionalAccessExpressionSyntax)context.Node;
 
             if (node.WhenNotNull is InvocationExpressionSyntax)
@@ -54,16 +52,12 @@ namespace RineaR.Analyzer
 
         private static void AnalyzeCoalesceExpression(SyntaxNodeAnalysisContext context)
         {
-            if (Utility.IsTarget(context) == false) return;
-            
             var node = (BinaryExpressionSyntax)context.Node;
             ReportDiagnostic(context, node.OperatorToken, "??");
         }
 
         private static void AnalyzeCoalesceAssignmentExpression(SyntaxNodeAnalysisContext context)
         {
-            if (Utility.IsTarget(context) == false) return;
-            
             var node = (AssignmentExpressionSyntax)context.Node;
             ReportDiagnostic(context, node.OperatorToken, "??=");
         }
